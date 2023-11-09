@@ -1,0 +1,82 @@
+DROP DATABASE IF EXISTS bradery_test_nicolas;
+
+CREATE DATABASE bradery_test_nicolas;
+
+USE bradery_test_nicolas;
+
+-- TABLES 
+
+-- Creating the Brands table
+CREATE TABLE Brands (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    main_img_url VARCHAR(255) NULL,
+    font_title VARCHAR(255) NULL
+);
+
+-- Creating the Products table
+CREATE TABLE Products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    img_url VARCHAR(255) NULL,
+    inventory INT NOT NULL,
+    stripe_id VARCHAR(255) NOT NULL,
+    brand_id INT,
+    FOREIGN KEY (brand_id) REFERENCES Brands(id)
+
+);
+
+CREATE TABLE Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NULL
+);
+
+-- Creating the Cart table
+CREATE TABLE Cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+-- Creating the CartItems table
+CREATE TABLE CartItems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT,
+    product_id INT,
+    quantity INT,
+    FOREIGN KEY (cart_id) REFERENCES Cart(id),
+    FOREIGN KEY (product_id) REFERENCES Products(id)
+);
+
+-- DATA 
+-- Inserting 8 sample fashion brand entries
+INSERT INTO Brands (name, main_img_url, font_title) VALUES 
+    ('Maroodjy', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481739/bradery-test/brands/pexels-ali-pazani-12513869_qv4rv8.jpg', 'Lobster Two'),
+    ('heifeoi', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481755/bradery-test/brands/pexels-the-lazy-artist-gallery-1300550_m4axmq.jpg', 'Mate SC'),
+    ('vista', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481753/bradery-test/brands/pexels-joshua-abner-3605015_smvsro.jpg', 'Marko One'),
+    ('effet pap''', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481785/bradery-test/brands/pexels-the-lazy-artist-gallery-1488507_dlkhza.jpg', 'Modern Antiqua'),
+    ('logos', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481744/bradery-test/brands/pexels-felipe-ferreira-701877_kavh8q.jpg', 'Modak'),
+    ('sorpresa', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481756/bradery-test/brands/pexels-melvin-buezo-2529172_xopigl.jpg', 'Montserrat Subrayada'),
+    ('altitude*', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481742/bradery-test/brands/pexels-cole-keister-2466756_cxlmeo.jpg', 'Montserrat Alternates'),
+    ('rewind', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481754/bradery-test/brands/pexels-murat-esibatir-4355702_dnavel.jpg', 'Nanum Myeongjo');
+
+-- Inserting 16 sample fashion product entries
+INSERT INTO Products (name, price, img_url, inventory, stripe_id, brand_id) VALUES 
+    ('T-shirt Blanc', 19.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699477625/bradery-test/products/pexels-sebastiaan-stam-1304647_oaelja.jpg', 100, 'prod_OyFJzBz0GcDpxx', 1),
+    ('Jean Slim Noir', 49.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699477699/bradery-test/products/black_jeans_qu4zy7.jpg', 75, 'prod_OyFXfpIgDlijB0', 1),
+    ('Chaussures de Sport', 89.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699477731/bradery-test/products/pexels-melvin-buezo-2529148_p2o8i6.jpg', 50, 'prod_OyFYkobNnXzyWE', 2),
+    ('Veste en Cuir', 199.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699477784/bradery-test/products/pexels-pitt-rom-18937907_beamdi.jpg', 25, 'prod_OyFZuZAkaxeOaR', 2),
+    ("Robe d'Été", 29.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699477824/bradery-test/products/pexels-godisable-jacob-1024036_mqgef7.jpg', 60, 'prod_OyFbjYcvbwJbzx', 3),
+    ('Cravate en Soie', 24.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479845/bradery-test/products/pexels-the-lazy-artist-gallery-1342609_jgvxja.jpg', 40, 'prod_OyFdmb5KTYwCEk', 3),
+    ('Sac à Main', 59.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479850/bradery-test/products/pexels-godisable-jacob-1374910_p1gayg.jpg', 30, 'prod_OyFhP42kRLhzBA', 4),
+    ('Chapeau Panama', 34.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479858/bradery-test/products/pexels-antoni-shkraba-7005668_whgiev.jpg', 20, 'prod_OyFku8X59XrKbT', 4),
+    ('Écharpe en Laine', 29.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479892/bradery-test/products/pexels-arsham-haghani-3584505_o9xpvg.jpg', 45, 'prod_OyFmLuwh6SJS2F', 5),
+    ('Ceinture en Cuir', 39.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479897/bradery-test/products/pexels-cottonbro-studio-6654762_kybijk.jpg', 70, 'prod_OyFoxYDZHxLGDN', 5),
+    ('Montre Classique', 149.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479901/bradery-test/products/pexels-lil-artsy-1374128_srr1cz.jpg', 15, 'prod_OyFpYGMSIhNzzU', 6),
+    ('Bottes en Cuir', 99.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479906/bradery-test/products/pexels-justus-menke-5214139_byev4u.jpg', 40, 'prod_OyFqGgsjroTRl9', 6),
+    ('Lunettes de Soleil', 79.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479915/bradery-test/products/pexels-mochammad-algi-3936915_tqmzkx.jpg', 50, 'prod_OyFsiEEPaiumSl', 7),
+    ('Chemise à Carreaux', 44.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479920/bradery-test/products/pexels-mahdi-chaghari-12975838_b9byvn.jpg', 55, 'prod_OyFtzkyWSQTz0l', 7),
+    ('Pull-over Gris', 64.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699479928/bradery-test/products/pexels-ramon-hughley-11094088_g26fau.jpg', 35, 'prod_OyFvFlyFqhfOi9', 8),
+    ("Sandales d'Été", 49.99, 'https://res.cloudinary.com/niikkoo/image/upload/v1699480153/bradery-test/products/pexels-ron-lach-7825121_kfk7qn.jpg', 40, 'prod_OyFzov7BbMnc06', 8);
+  

@@ -8,8 +8,50 @@ datasource db {
 }
 
 model Products {
-  id        Int     @id @default(autoincrement())
-  name      String  @db.VarChar(255)
-  price     Decimal @db.Decimal(10, 2)
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(255)
+  price     Decimal     @db.Decimal(10, 2)
+  img_url   String?     @db.VarChar(255)
   inventory Int
+  stripe_id String      @db.VarChar(255)
+  brand_id  Int?
+  CartItems CartItems[]
+  Brands    Brands?     @relation(fields: [brand_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "products_ibfk_1")
+
+  @@index([brand_id], map: "brand_id")
+}
+
+model Brands {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(255)
+  main_img_url String?    @db.VarChar(255)
+  font_title   String?    @db.VarChar(255)
+  Products     Products[]
+}
+
+model Cart {
+  id        Int         @id @default(autoincrement())
+  user_id   Int?
+  Users     Users?      @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cart_ibfk_1")
+  CartItems CartItems[]
+
+  @@index([user_id], map: "user_id")
+}
+
+model CartItems {
+  id         Int       @id @default(autoincrement())
+  cart_id    Int?
+  product_id Int?
+  quantity   Int?
+  Cart       Cart?     @relation(fields: [cart_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cartitems_ibfk_1")
+  Products   Products? @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cartitems_ibfk_2")
+
+  @@index([cart_id], map: "cart_id")
+  @@index([product_id], map: "product_id")
+}
+
+model Users {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(255)
+  Cart Cart[]
 }
