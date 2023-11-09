@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import Image from "next/image";
 
+import AddToCartBtn from "@/components/AddToCartBtn";
+
 import { BrandData } from "../../interfaces";
 
 async function getBrandData(brandName: string) {
@@ -11,7 +13,13 @@ async function getBrandData(brandName: string) {
 
       include: {
         Products: {
-          select: { name: true, price: true, img_url: true, stripe_id: true },
+          select: {
+            name: true,
+            price: true,
+            img_url: true,
+            stripe_id: true,
+            inventory: true,
+          },
         },
       },
     });
@@ -26,7 +34,11 @@ async function getBrandData(brandName: string) {
   }
 }
 
-export default async function Brand({ params }: { params: { brand: string } }) {
+export default async function BrandPage({
+  params,
+}: {
+  params: { brand: string };
+}) {
   const data: BrandData | null | undefined = await getBrandData(params.brand);
   console.log(data);
 
@@ -50,12 +62,15 @@ export default async function Brand({ params }: { params: { brand: string } }) {
           {data.Products.map((product, index) => {
             return (
               <div data-stripe={product.stripe_id} key={index}>
-                <Image
-                  width={200}
-                  height={200}
-                  src={product.img_url!}
-                  alt={`${product.name} banner image`}
-                />
+                <div className="relative">
+                  <AddToCartBtn productData={product} />
+                  <Image
+                    width={200}
+                    height={200}
+                    src={product.img_url!}
+                    alt={`${product.name} banner image`}
+                  />
+                </div>
                 <span>{product.name}</span>
                 <span>{+product.price + "€"}</span>
               </div>

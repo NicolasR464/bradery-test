@@ -5,6 +5,7 @@ export interface Product {
   price: Decimal;
   img_url: string | null;
   stripe_id: string;
+  inventory: number;
 }
 
 export interface BrandData {
