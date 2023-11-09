@@ -33,23 +33,26 @@ CREATE TABLE Users (
 );
 
 -- Creating the Cart table
-CREATE TABLE Cart (
+CREATE TABLE Carts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
 
 -- Creating the CartItems table
 CREATE TABLE CartItems (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    cart_id INT,
-    product_id INT,
-    quantity INT,
+    cart_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
     FOREIGN KEY (cart_id) REFERENCES Cart(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
 
 -- DATA 
+-- Inserting 1 default user
+INSERT INTO users (name) VALUES ('user one');
+
 -- Inserting 8 sample fashion brand entries
 INSERT INTO Brands (name, main_img_url, font_title) VALUES 
     ('Maroodjy', 'https://res.cloudinary.com/niikkoo/image/upload/v1699481739/bradery-test/brands/pexels-ali-pazani-12513869_qv4rv8.jpg', 'Lobster Two'),

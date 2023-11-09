@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 import Image from "next/image";
 
 import AddToCartBtn from "@/components/AddToCartBtn";
+import ShopVignette from "@/components/ShopVignette";
 
 import { BrandData } from "../../interfaces";
 
@@ -14,6 +15,7 @@ async function getBrandData(brandName: string) {
       include: {
         Products: {
           select: {
+            id: true,
             name: true,
             price: true,
             img_url: true,
@@ -58,25 +60,11 @@ export default async function BrandPage({
 
       {/* Products body */}
       {data && (
-        <div>
+        <section className="flex justify-around m-8">
           {data.Products.map((product, index) => {
-            return (
-              <div data-stripe={product.stripe_id} key={index}>
-                <div className="relative">
-                  <AddToCartBtn productData={product} />
-                  <Image
-                    width={200}
-                    height={200}
-                    src={product.img_url!}
-                    alt={`${product.name} banner image`}
-                  />
-                </div>
-                <span>{product.name}</span>
-                <span>{+product.price + "€"}</span>
-              </div>
-            );
+            return <ShopVignette key={index} productData={product} />;
           })}
-        </div>
+        </section>
       )}
     </div>
   );
