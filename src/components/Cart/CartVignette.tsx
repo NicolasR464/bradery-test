@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useStore } from "@/utils/store";
+import NumSelector from "./NumSelector";
 
-export default function CartVignette({ item }: { item: any }) {
+export default function CartVignette({ index }: { index: number }) {
   const [isAdded, setIsAdded] = useState(false);
   const [id, setId] = useState("");
   const [stripeProdId, setStripeProductId] = useState("");
@@ -14,63 +15,54 @@ export default function CartVignette({ item }: { item: any }) {
   const [amountSelected, setAmountSelected] = useState(1);
 
   const { bag } = useStore();
+  console.log("🔥");
+  console.log(bag);
+  console.log("🔥🔥");
+  console.log(bag[index]);
 
-  useEffect(() => {
-    setId(item.id);
-  }, [item.id]);
+  // useEffect(() => {
+  //   setId(item.id);
+  // }, [item.id]);
 
-  useEffect(() => {
-    setStripeProductId(item.stripeId);
-  }, [item.stripeId]);
+  // useEffect(() => {
+  //   setStripeProductId(item.stripeId);
+  // }, [item.stripeId]);
 
-  useEffect(() => {
-    setImg(item.img);
-  }, [item.img, img]);
+  // useEffect(() => {
+  //   setImg(item.img);
+  // }, [item.img, img]);
 
-  useEffect(() => {
-    setPrice(item.price);
-  }, [item.price]);
+  // useEffect(() => {
+  //   setPrice(item.price);
+  // }, [item.price]);
 
-  useEffect(() => {
-    setCollection(item.collection);
-  }, [item.collection]);
+  // useEffect(() => {
+  //   setCollection(item.collection);
+  // }, [item.collection]);
 
-  useEffect(() => {
-    setPrintLeft(item.prints_left);
-  }, [item.prints_left]);
+  // useEffect(() => {
+  //   setPrintLeft(item.prints_left);
+  // }, [item.prints_left]);
 
-  useEffect(() => {
-    setAmountSelected(item.amount_selected);
-  }, [item.amount_selected]);
+  // useEffect(() => {
+  //   setAmountSelected(item.amount_selected);
+  // }, [item.amount_selected]);
 
   const removeItem = () => {
     useStore.setState((state) => ({
-      bag: [...state.bag.filter((el) => el.id !== id)],
+      bag: [
+        ...state.bag.filter((el) => el.product.id !== bag[index].product.id),
+      ],
     }));
     useStore.setState((state) => ({
       isCartOpen: state.bag.length === 0 ? false : state.isCartOpen,
     }));
     useStore.setState((state) => {
       const updateTotal = state.bag.reduce(
-        (acc, item) => acc + item.amount_selected * item.price,
+        (acc, item) => acc + amountSelected * item.product.price,
         0
       );
       return { cartTotal: updateTotal };
-    });
-  };
-
-  const changeSelecNum = (n: string) => {
-    useStore.setState((state) => {
-      const updatedBag = state.bag.map((obj) =>
-        obj.id === id ? { ...obj, amount_selected: +n } : obj
-      );
-
-      const updatedTotal = updatedBag.reduce(
-        (acc, item) => acc + item.amount_selected * item.price,
-        0
-      );
-
-      return { bag: updatedBag, cartTotal: updatedTotal };
     });
   };
 
@@ -80,7 +72,8 @@ export default function CartVignette({ item }: { item: any }) {
         <span>{collection}</span>
         <span>{price}€/unité</span>
         <div className="form-control w-full max-w-xs">
-          <select
+          <NumSelector index />
+          {/* <select
             onChange={(e) => changeSelecNum(e.target.value)}
             className="select select-bordered  w-full max-w-xs"
           >
@@ -91,7 +84,7 @@ export default function CartVignette({ item }: { item: any }) {
                   {x + 1}
                 </option>
               ))}
-          </select>
+          </select> */}
           <button onClick={removeItem} className="underline">
             retirer
           </button>

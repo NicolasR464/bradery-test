@@ -15,7 +15,7 @@ export default function CartDrawer() {
         inputRef.current &&
         !inputRef.current.contains(e.target)
       ) {
-        useStore.setState((state) => ({ isCartOpen: false }));
+        useStore.setState(() => ({ isCartOpen: false }));
       }
     };
 
@@ -53,8 +53,8 @@ export default function CartDrawer() {
             </button>
             <h2 className="text-center tracking-wider text-4xl ">your bag</h2>
             <div className="max-h-[80vh] overflow-scroll">
-              {bag.map((item, i) => (
-                <CartVignette item={item} key={i} />
+              {bag.map((_, i) => (
+                <CartVignette index={i} key={i} />
               ))}
             </div>
 

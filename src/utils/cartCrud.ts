@@ -1,4 +1,6 @@
-export async function postCart(product: any) {
+import { CartItem } from "./interfaces";
+
+export async function postCart(product: CartItem) {
   const config = {
     method: "POST",
     body: JSON.stringify(product),
@@ -9,13 +11,14 @@ export async function postCart(product: any) {
 
     if (data.status === 200 || data.status === 201) {
       const datalParsed = await data.json();
-      // console.log(datalParsed);
+      console.log(datalParsed);
       return datalParsed;
     } else {
       // console.error("something went wrong");
       return 500;
     }
   } catch (err) {
+    console.log("❌ in cart crud");
     console.log(err);
     return 500;
   }

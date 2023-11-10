@@ -29,29 +29,29 @@ model Brands {
   Products     Products[]
 }
 
-model Cart {
-  id        Int         @id @default(autoincrement())
-  user_id   Int?
-  Users     Users?      @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cart_ibfk_1")
-  CartItems CartItems[]
-
-  @@index([user_id], map: "user_id")
-}
-
 model CartItems {
-  id         Int       @id @default(autoincrement())
-  cart_id    Int?
-  product_id Int?
-  quantity   Int?
-  Cart       Cart?     @relation(fields: [cart_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cartitems_ibfk_1")
-  Products   Products? @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cartitems_ibfk_2")
+  id         Int      @id @default(autoincrement())
+  cart_id    Int
+  product_id Int
+  quantity   Int
+  Cart       Carts    @relation(fields: [cart_id], references: [id], onUpdate: Restrict, map: "cartitems_ibfk_1")
+  Products   Products @relation(fields: [product_id], references: [id], onUpdate: Restrict, map: "cartitems_ibfk_2")
 
   @@index([cart_id], map: "cart_id")
   @@index([product_id], map: "product_id")
 }
 
 model Users {
-  id   Int     @id @default(autoincrement())
-  name String? @db.VarChar(255)
-  Cart Cart[]
+  id    Int     @id @default(autoincrement())
+  name  String? @db.VarChar(255)
+  Carts Carts[]
+}
+
+model Carts {
+  id        Int         @id @default(autoincrement())
+  user_id   Int
+  CartItems CartItems[]
+  Users     Users       @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "carts_ibfk_1")
+
+  @@index([user_id], map: "user_id")
 }

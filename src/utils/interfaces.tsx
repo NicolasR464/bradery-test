@@ -14,3 +14,13 @@ export interface BrandData {
   font_title: string | null;
   Products: Product[];
 }
+
+export interface NumSelectorParam {
+  id: number;
+  amountSelected: number;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}

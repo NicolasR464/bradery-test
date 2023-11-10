@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import { Product } from "./interfaces";
+import { CartItem } from "./interfaces";
 
 export const useStore = create<{
   isCartOpen: Boolean;
-  bag: Product[];
+  bag: CartItem[];
   cartTotal: number;
 }>(() => ({ isCartOpen: false, bag: [], cartTotal: 0 }));

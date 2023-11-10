@@ -8,7 +8,7 @@ import { useStore } from "@/utils/store";
 import { Button } from "@nextui-org/button";
 
 const addProdOnClick = async (product: Product) => {
-  const crudRes = await postCart(product);
+  const crudRes = await postCart({ product, quantity: 1 });
   console.log({ product });
 
   //   console.log({ crudRes });
@@ -17,7 +17,7 @@ const addProdOnClick = async (product: Product) => {
     // state management for cart update
     useStore.setState((state) => ({
       isCartOpen: true,
-      bag: [...state.bag, product],
+      bag: [...state.bag, { product, quantity: 1 }],
       cartTotal: state.cartTotal + product.price,
     }));
   }

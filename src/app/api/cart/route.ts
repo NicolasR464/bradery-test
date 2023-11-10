@@ -1,33 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { Product } from "../../../utils/interfaces";
+import { CartItem } from "@/utils/interfaces";
 
 export async function POST(req: NextRequest) {
   console.log("🔥 POST");
 
-  const productData: Product = await req.json();
-  //   console.log(productData);
-
-  // first check if the user already has a cart
+  const item: CartItem = await req.json();
+  console.log(item);
 
   try {
-    const cartExists = await prisma.cart.findFirst({
+    console.log("trying");
+
+    const cartExists = await prisma.carts.findFirst({
       where: {
         user_id: 1,
       },
     });
+    console.log("first find");
+
     console.log({ cartExists });
 
     if (!cartExists) {
-      const addToCart = await prisma.cart.create({
+      console.log("doesnt exists");
+
+      const addToCart = await prisma.carts.create({
         data: {
           user_id: 1,
           CartItems: {
             create: [
               {
-                product_id: productData.id,
-                quantity: 1,
+                product_id: item.product.id,
+                quantity: item.quantity,
               },
             ],
           },
@@ -40,7 +44,7 @@ export async function POST(req: NextRequest) {
         { status: 201 }
       );
     } else {
-      const updatedCart = await prisma.cart.update({
+      const updatedCart = await prisma.carts.update({
         where: {
           id: cartExists.id,
         },
@@ -48,8 +52,8 @@ export async function POST(req: NextRequest) {
           CartItems: {
             create: [
               {
-                product_id: productData.id,
-                quantity: 1,
+                product_id: item.product.id,
+                quantity: item.quantity,
               },
             ],
           },
