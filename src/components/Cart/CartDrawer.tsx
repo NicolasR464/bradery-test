@@ -49,9 +49,11 @@ export default function CartDrawer() {
               }}
               className="link absolute top-3 left-3"
             >
-              close
+              fermer
             </button>
-            <h2 className="text-center tracking-wider text-4xl ">your bag</h2>
+            <h2 className="text-center tracking-wider text-4xl ">
+              votre sélection
+            </h2>
             <div className="max-h-[80vh] overflow-scroll">
               {bag.map((_, i) => (
                 <CartVignette index={i} key={i} />
