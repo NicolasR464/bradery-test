@@ -1,6 +1,4 @@
 export async function postCart(product: any) {
-  console.log("postCart 🚀");
-
   const config = {
     method: "POST",
     body: JSON.stringify(product),
@@ -9,14 +7,16 @@ export async function postCart(product: any) {
   try {
     const data = await fetch("/api/cart", config);
 
-    const datalParsed = await data.json();
-
-    if (datalParsed.status == 200) {
-      console.log(datalParsed);
+    if (data.status === 200 || data.status === 201) {
+      const datalParsed = await data.json();
+      // console.log(datalParsed);
+      return datalParsed;
     } else {
-      console.error("something went wrong");
+      // console.error("something went wrong");
+      return 500;
     }
   } catch (err) {
     console.log(err);
+    return 500;
   }
 }

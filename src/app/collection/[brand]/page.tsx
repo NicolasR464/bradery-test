@@ -5,7 +5,7 @@ import Image from "next/image";
 import AddToCartBtn from "@/components/AddToCartBtn";
 import ShopVignette from "@/components/ShopVignette";
 
-import { BrandData } from "../../interfaces";
+import { BrandData } from "../../../utils/interfaces";
 
 async function getBrandData(brandName: string) {
   try {
@@ -13,16 +13,7 @@ async function getBrandData(brandName: string) {
       where: { name: brandName },
 
       include: {
-        Products: {
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            img_url: true,
-            stripe_id: true,
-            inventory: true,
-          },
-        },
+        Products: true,
       },
     });
 

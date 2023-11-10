@@ -1,7 +1,7 @@
 "use client";
 
 import AddToCartBtn from "./AddToCartBtn";
-import { Product } from "../app/interfaces";
+import { Product } from "../utils/interfaces";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
