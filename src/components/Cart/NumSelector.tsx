@@ -40,13 +40,19 @@ export default function NumSelector({ index }: { index: number }) {
   return (
     <div className="flex justify-center items-center border-2 border-second p-2 rounded-xl">
       <LuMinus
-        className="cursor-pointer"
-        onClick={() => setAmount(amount - 1)}
+        className={amount > 0 ? "cursor-pointer" : "cursor-not-allowed"}
+        onClick={() => setAmount(amount != 0 ? amount - 1 : 0)}
       />
       <span className="p-3">{amount}</span>
       <LuPlus
-        className="cursor-pointer"
-        onClick={() => setAmount(amount + 1)}
+        className={
+          bag[index].product.inventory > amount
+            ? "cursor-pointer"
+            : "cursor-not-allowed"
+        }
+        onClick={() =>
+          setAmount(bag[index].product.inventory > amount ? amount + 1 : amount)
+        }
       />
     </div>
   );
