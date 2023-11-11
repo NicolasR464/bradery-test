@@ -7,29 +7,15 @@ import { Input } from "@nextui-org/react";
 import { useDebouncedState } from "@mantine/hooks";
 
 export default function NumSelector({ index }: { index: number }) {
-  const [amount, setAmount] = useState<number>(index);
-  const [amountDebounce, setAmountDebounce] = useDebouncedState(index, 500);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkInventory = (n: number) => {
-    console.log("let's check inventory");
-  };
-
-  useEffect(() => {
-    setAmountDebounce(amount);
-  }, [amount, setAmountDebounce]);
-
-  useEffect(() => {
-    checkInventory(amountDebounce);
-  }, [amountDebounce]);
-
   const { bag } = useStore();
+  const [amount, setAmount] = useState<number>(bag[index].quantity);
+  const [amountDebounce, setAmountDebounce] = useDebouncedState(index, 500);
 
   const changeStore = () => {
     useStore.setState((state) => {
       const updatedBag = state.bag.map((obj) =>
         obj.product.id === bag[index].product.id
-          ? { ...obj, amount_selected: amount }
+          ? { ...obj, quantity: amount }
           : obj
       );
 
@@ -41,6 +27,15 @@ export default function NumSelector({ index }: { index: number }) {
       return { bag: updatedBag, cartTotal: updatedTotal };
     });
   };
+
+  useEffect(() => {
+    setAmountDebounce(amount);
+  }, [amount, setAmountDebounce]);
+
+  useEffect(() => {
+    changeStore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amountDebounce]);
 
   return (
     <div className="flex justify-center items-center border-2 border-second p-2 rounded-xl">
