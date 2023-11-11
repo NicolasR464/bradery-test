@@ -3,28 +3,33 @@ import { LuMinus, LuPlus } from "react-icons/lu";
 import { NumSelectorParam } from "@/utils/interfaces";
 import { useState, useEffect } from "react";
 import { useStore } from "@/utils/store";
+import { Input } from "@nextui-org/react";
+import { useDebouncedState } from "@mantine/hooks";
 
 export default function NumSelector({ index }: { index: number }) {
   const [amount, setAmount] = useState<number>(index);
-  //   console.log(prodInfo);
+  const [amountDebounce, setAmountDebounce] = useDebouncedState(index, 500);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const checkInventory = (n: number) => {
+    console.log("let's check inventory");
+  };
+
+  useEffect(() => {
+    setAmountDebounce(amount);
+  }, [amount, setAmountDebounce]);
+
+  useEffect(() => {
+    checkInventory(amountDebounce);
+  }, [amountDebounce]);
 
   const { bag } = useStore();
-  useEffect(() => {
-    console.log(bag[index].quantity);
-  }, [amount, bag, index]);
 
-  console.log("in num selector component 💥");
-
-  console.log({ index });
-
-  console.log(bag[index]);
-
-  const changeSelecNum = (n: number) => {
-    setAmount(n);
+  const changeStore = () => {
     useStore.setState((state) => {
       const updatedBag = state.bag.map((obj) =>
         obj.product.id === bag[index].product.id
-          ? { ...obj, amount_selected: n }
+          ? { ...obj, amount_selected: amount }
           : obj
       );
 
@@ -41,12 +46,12 @@ export default function NumSelector({ index }: { index: number }) {
     <div className="flex justify-center items-center border-2 border-second p-2 rounded-xl">
       <LuMinus
         className="cursor-pointer"
-        onClick={() => changeSelecNum(amount - 1)}
+        onClick={() => setAmount(amount - 1)}
       />
       <span className="p-3">{amount}</span>
       <LuPlus
         className="cursor-pointer"
-        onClick={() => changeSelecNum(amount + 1)}
+        onClick={() => setAmount(amount + 1)}
       />
     </div>
   );
