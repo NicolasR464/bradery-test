@@ -27,14 +27,8 @@ export default function AddToCartBtn({
     setIsAddedToCart(true);
 
     const crudRes = await postCart({ product, quantity: 1 });
-    // console.log({ product });
-    console.log("🤞");
-
-    console.log(crudRes);
-    console.log(crudRes.data.cart_id);
 
     if (crudRes !== 500) {
-      // state management for cart update
       let updateProductQuantity: any;
       if (productInCart) {
         updateProductQuantity = bag.map((bagItem) =>

@@ -41,3 +41,23 @@ export async function deleteProduct(productId: number, cartId: number) {
     return 500;
   }
 }
+
+export async function postOrder(bag: any) {
+  const config = {
+    method: "POST",
+    body: JSON.stringify(bag),
+  };
+  try {
+    const response = await fetch("/api/order", config);
+    console.log(response);
+
+    if (response.status === 201) {
+      return { response: "order succeeded", status: 201 };
+    }
+
+    return response;
+  } catch (err) {
+    console.log(err);
+    return 500;
+  }
+}

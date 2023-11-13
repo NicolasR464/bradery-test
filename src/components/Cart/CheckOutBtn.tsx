@@ -1,18 +1,26 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useStore } from "@/utils/store";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { roundToDecimals } from "@/utils/mathRound";
+import { postOrder } from "@/utils/cartCrud";
 
 export default function CheckOutBtn() {
   const searchParams = useSearchParams();
 
   const { bag, cartTotal } = useStore();
-
-  const handlePayment = () => {};
-
-  useEffect(() => {}, []);
+  const router = useRouter();
+  const handlePayment = async () => {
+    const orderRes: any = await postOrder(bag);
+    console.log(orderRes);
+    if (orderRes.status == 201) {
+      useStore.setState(() => ({ bag: [], cartTotal: 0, isCartOpen: false }));
+      router.push("/success");
+    }
+  };
 
   return (
     <button

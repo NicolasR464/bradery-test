@@ -8,15 +8,16 @@ datasource db {
 }
 
 model Products {
-  id        Int         @id @default(autoincrement())
-  name      String      @db.VarChar(255)
-  price     Decimal     @db.Decimal(10, 2)
-  img_url   String?     @db.VarChar(255)
-  inventory Int
-  stripe_id String      @db.VarChar(255)
-  brand_id  Int?
-  CartItems CartItems[]
-  Brands    Brands?     @relation(fields: [brand_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "products_ibfk_1")
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(255)
+  price      Decimal      @db.Decimal(10, 2)
+  img_url    String?      @db.VarChar(255)
+  inventory  Int
+  stripe_id  String       @db.VarChar(255)
+  brand_id   Int?
+  CartItems  CartItems[]
+  OrderItems OrderItems[]
+  Brands     Brands?      @relation(fields: [brand_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "products_ibfk_1")
 
   @@index([brand_id], map: "brand_id")
 }
@@ -42,9 +43,10 @@ model CartItems {
 }
 
 model Users {
-  id    Int     @id @default(autoincrement())
-  name  String? @db.VarChar(255)
-  Carts Carts[]
+  id     Int      @id @default(autoincrement())
+  name   String?  @db.VarChar(255)
+  Carts  Carts[]
+  Orders Orders[]
 }
 
 model Carts {
@@ -52,6 +54,27 @@ model Carts {
   user_id   Int
   CartItems CartItems[]
   Users     Users       @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "carts_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model OrderItems {
+  id         Int      @id @default(autoincrement())
+  order_id   Int
+  product_id Int
+  quantity   Int
+  Orders     Orders   @relation(fields: [order_id], references: [id], onUpdate: Restrict, map: "orderitems_ibfk_1")
+  Products   Products @relation(fields: [product_id], references: [id], onUpdate: Restrict, map: "orderitems_ibfk_2")
+
+  @@index([order_id], map: "order_id")
+  @@index([product_id], map: "product_id")
+}
+
+model Orders {
+  id         Int          @id @default(autoincrement())
+  user_id    Int
+  OrderItems OrderItems[]
+  Users      Users        @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "orders_ibfk_1")
 
   @@index([user_id], map: "user_id")
 }
