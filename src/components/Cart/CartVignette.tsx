@@ -3,11 +3,17 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useStore } from "@/utils/store";
 import NumSelector from "./NumSelector";
+import { deleteProduct } from "@/utils/cartCrud";
 
 export default function CartVignette({ index }: { index: number }) {
-  const { bag } = useStore();
+  const { bag, cartId } = useStore();
 
-  const removeItem = () => {
+  const removeItem = async () => {
+    console.log("DELETE ON CLICK FUNCTION");
+
+    const deleteRes = await deleteProduct(bag[index].product.id, cartId);
+    console.log({ deleteRes });
+
     useStore.setState((state) => ({
       bag: [
         ...state.bag.filter((el) => el.product.id !== bag[index].product.id),

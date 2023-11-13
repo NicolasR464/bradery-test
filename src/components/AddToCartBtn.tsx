@@ -15,23 +15,40 @@ export default function AddToCartBtn({
   const [product, setProduct] = useState<Product>();
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 
+  const { bag } = useStore();
+
   useEffect(() => {
     if (productData) setProduct(productData);
   }, [productData]);
 
   const addProdOnClick = async (product: Product) => {
+    const productInCart = bag.some((bag) => bag.product.id === product.id);
+
     setIsAddedToCart(true);
 
     const crudRes = await postCart({ product, quantity: 1 });
-    console.log({ product });
+    // console.log({ product });
+    console.log("🤞");
 
-    //   console.log({ crudRes });
+    console.log(crudRes);
+    console.log(crudRes.data.cart_id);
 
     if (crudRes !== 500) {
       // state management for cart update
+      let updateProductQuantity: any;
+      if (productInCart) {
+        updateProductQuantity = bag.map((bagItem) =>
+          bagItem.product.id === product.id
+            ? { ...bagItem, quantity: bagItem.quantity + 1 }
+            : bagItem
+        );
+      }
       useStore.setState((state) => ({
+        cartId: crudRes.data.cart_id,
         isCartOpen: true,
-        bag: [...state.bag, { product, quantity: 1 }],
+        bag: productInCart
+          ? updateProductQuantity
+          : [...state.bag, { product, quantity: 1 }],
         cartTotal: state.cartTotal + product.price,
       }));
     }

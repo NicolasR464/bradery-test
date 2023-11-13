@@ -5,27 +5,41 @@ import { useState, useEffect } from "react";
 import { useStore } from "@/utils/store";
 import { Input } from "@nextui-org/react";
 import { useDebouncedState } from "@mantine/hooks";
+import { postCart } from "@/utils/cartCrud";
 
 export default function NumSelector({ index }: { index: number }) {
   const { bag } = useStore();
+
   const [amount, setAmount] = useState<number>(bag[index].quantity);
   const [amountDebounce, setAmountDebounce] = useDebouncedState(index, 500);
 
-  const changeStore = () => {
-    useStore.setState((state) => {
-      const updatedBag = state.bag.map((obj) =>
-        obj.product.id === bag[index].product.id
-          ? { ...obj, quantity: amount }
-          : obj
-      );
+  useEffect(() => {
+    setAmount(bag[index].quantity);
+  }, [bag, index]);
 
-      const updatedTotal = updatedBag.reduce(
-        (acc, item) => acc + item.quantity * item.product.price,
-        0
-      );
-
-      return { bag: updatedBag, cartTotal: updatedTotal };
+  const changeStore = async () => {
+    const crudRes = await postCart({
+      product: bag[index].product,
+      quantity: amount,
     });
+    if (crudRes !== 500) {
+      useStore.setState((state) => {
+        const updatedBag = state.bag.map((obj) =>
+          obj.product.id === bag[index].product.id
+            ? { ...obj, quantity: amount }
+            : obj
+        );
+
+        const updatedTotal = updatedBag.reduce(
+          (acc, item) => acc + item.quantity * item.product.price,
+          0
+        );
+
+        return { bag: updatedBag, cartTotal: updatedTotal };
+      });
+    } else {
+      console.log("Something went wrong.");
+    }
   };
 
   useEffect(() => {

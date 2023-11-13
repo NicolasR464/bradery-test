@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { id: number } }
 ) {
   const prodId = params.id;
-  console.log({ prodId });
+  // console.log({ prodId });
 
   try {
     const inventoryNumb = await prisma.products.findFirst({
@@ -19,7 +19,7 @@ export async function GET(
       },
     });
 
-    console.log({ inventoryNumb });
+    // console.log({ inventoryNumb });
 
     return NextResponse.json(inventoryNumb, { status: 200 });
   } catch (err) {

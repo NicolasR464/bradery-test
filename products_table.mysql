@@ -32,7 +32,7 @@ CREATE TABLE Users (
     name VARCHAR(255) NULL
 );
 
--- Creating the Cart table
+-- Creating the Carts table
 CREATE TABLE Carts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -48,6 +48,25 @@ CREATE TABLE CartItems (
     FOREIGN KEY (cart_id) REFERENCES Carts(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
+
+-- Creating the Orders table
+CREATE TABLE Orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+-- Creating the OrderItems table
+CREATE TABLE OrderItems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (Order_id) REFERENCES Orders(id),
+    FOREIGN KEY (product_id) REFERENCES Products(id)
+);
+
+
 
 -- DATA 
 -- Inserting 1 default user

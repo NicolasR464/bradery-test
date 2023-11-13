@@ -26,16 +26,16 @@ try {
       },
     },
   });
-  console.log("product details:");
+  // console.log("product details:");
 
-  console.log(productsDetails);
+  // console.log(productsDetails);
 
   const cartInfo: CartItem[] = productsDetails.map((product, index) => ({
     product,
     quantity: cartData?.CartItems[index].quantity!,
   }));
 
-  console.log(cartInfo);
+  // console.log(cartInfo);
 
   useStore.setState(() => ({ bag: cartInfo, cartTotal: 1 }));
 } catch (err) {
@@ -50,7 +50,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vitrine",
-  description: "wow",
+  description: "1,2,1,2 This is a tech test",
 };
 
 export default function RootLayout({

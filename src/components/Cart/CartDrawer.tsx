@@ -60,7 +60,7 @@ export default function CartDrawer() {
               ))}
             </div>
 
-            {/* <CheckOutBtn /> */}
+            <CheckOutBtn />
           </div>
         </div>
       </div>
