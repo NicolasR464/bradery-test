@@ -2,7 +2,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First connect to your mysql server adding the url in the .env file
+Start by running the command npm install
+
+Second, connect to your mysql server while adding the url in the .env file
 It should look like so:
 
 DATABASE_URL="mysql://name:password@localhost:3306/bradery_test_nicolas?schema=public"
