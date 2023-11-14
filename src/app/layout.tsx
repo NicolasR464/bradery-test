@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Junge, Lobster_Two } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import CartDrawer from "@/components/Cart/CartDrawer";
@@ -7,6 +7,7 @@ import { useStore } from "@/utils/store";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { CartItem } from "@/utils/interfaces";
+import Link from "next/link";
 
 try {
   const cartData = await prisma.carts.findFirst({
@@ -26,16 +27,11 @@ try {
       },
     },
   });
-  // console.log("product details:");
-
-  // console.log(productsDetails);
 
   const cartInfo: CartItem[] = productsDetails.map((product, index) => ({
     product,
     quantity: cartData?.CartItems[index].quantity!,
   }));
-
-  // console.log(cartInfo);
 
   useStore.setState(() => ({ bag: cartInfo, cartTotal: 1 }));
 } catch (err) {
@@ -47,6 +43,16 @@ try {
 }
 
 const inter = Inter({ subsets: ["latin"] });
+const lobster = Lobster_Two({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-lobster",
+});
+const junge = Junge({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-junge",
+});
 
 export const metadata: Metadata = {
   title: "Vitrine",
@@ -60,10 +66,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         {" "}
         <Providers>
           <CartDrawer />
+          <div className="flex w-screen justify-center">
+            <Link
+              href="/"
+              className={(junge.className, "text-center text-4xl")}
+            >
+              vitrine
+            </Link>
+          </div>
           {children}{" "}
         </Providers>
       </body>
